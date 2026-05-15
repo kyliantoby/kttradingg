@@ -1,370 +1,444 @@
-import React, { useState } from "react";
-import { createRoot } from "react-dom/client";
+import React, { useMemo, useState } from "react";
+import {
+  ShoppingCart,
+  Search,
+  Star,
+  Package,
+  ShieldCheck,
+  Truck,
+  Menu,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 const products = [
   {
+    id: 1,
     name: "Inferno X Boosterbox",
     price: 120,
+    tag: "Hot pick",
     description: "Japanse Inferno X boosterbox, sealed en perfect voor collectors.",
-    images: ["inferno-x-side-2.jpeg", "inferno-x-back.jpeg"],
+    accent: "from-orange-100 to-amber-50",
+    images: ["/inferno-x-side-2.jpeg", "/inferno-x-back.jpeg"],
   },
   {
+    id: 2,
     name: "Mega Dream EX Boosterbox",
     price: 110,
-    description: "Japanse Mega Dream EX boosterbox, sealed en ideaal voor moderne collectors.",
+    tag: "Nieuw",
+    description: "Japanse Mega Dream EX boosterbox, sealed en ideaal voor verzamelaars van moderne sets.",
+    accent: "from-sky-100 to-stone-50",
     images: [
-      "mega-dream-front.jpeg",
-      "mega-dream-back.jpeg",
-      "mega-dream-side-1.jpeg",
-      "mega-dream-side-2.jpeg",
-      "mega-dream-side-3.jpeg",
+      "/mega-dream-front.jpeg",
+      "/mega-dream-back.jpeg",
+      "/mega-dream-side-1.jpeg",
+      "/mega-dream-side-2.jpeg",
+      "/mega-dream-side-3.jpeg",
     ],
   },
   {
+    id: 3,
     name: "Terastal Festival Boosterbox",
     price: 110,
-    description: "Premium boosterbox met mooie verzamelwaarde.",
+    tag: "Populair",
+    description: "Een feestelijke set met premium uitstraling en verzamelwaarde.",
+    accent: "from-pink-100 to-stone-50",
     images: [],
+    art: "terastal",
   },
 ];
 
-function App() {
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [slide, setSlide] = useState(0);
-  const [cart, setCart] = useState([]);
+function formatPrice(value) {
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
+  }).format(value);
+}
 
-  function openProduct(product) {
-    setSelectedProduct(product);
-    setSlide(0);
-  }
-
-  function nextImage() {
-    setSlide((slide + 1) % selectedProduct.images.length);
-  }
-
-  function prevImage() {
-    setSlide((slide - 1 + selectedProduct.images.length) % selectedProduct.images.length);
-  }
+function BoosterBoxArt({ product }) {
+  const styles = {
+    1: "from-orange-500 via-pink-400 to-cyan-300",
+    2: "from-zinc-900 via-fuchsia-500 to-yellow-300",
+    3: "from-pink-300 via-sky-200 to-yellow-100",
+  };
 
   return (
-    <div style={styles.page}>
-      <header style={styles.header}>
-        <div>
-          <h1 style={styles.logo}>KT Trading Cards</h1>
-          <p style={styles.subtitle}>Pokémon kaarten & boosterboxen</p>
-        </div>
-        <div style={styles.cart}>🛒 {cart.length} items</div>
-      </header>
-
-      <section style={styles.hero}>
-        <div>
-          <p style={styles.badge}>Nieuwe sealed collectie</p>
-          <h2 style={styles.heroTitle}>Zachte vibes, sterke pulls.</h2>
-          <p style={styles.heroText}>
-            Shop boosterboxen met een rustige beige uitstraling, luxe productfoto’s
-            en verzending uitsluitend binnen Nederland.
-          </p>
-          <a href="#producten" style={styles.button}>Bekijk producten</a>
-        </div>
-      </section>
-
-      <section id="producten" style={styles.products}>
-        <h2 style={styles.sectionTitle}>Boosterboxen</h2>
-
-        <div style={styles.grid}>
-          {products.map((product) => (
-            <div key={product.name} style={styles.card} onClick={() => openProduct(product)}>
-              <div style={styles.imageBox}>
-                {product.images.length > 0 ? (
-                  <img src={`/${product.images[0]}`} alt={product.name} style={styles.image} />
-                ) : (
-                  <div style={styles.placeholder}>📦</div>
-                )}
-                {product.images.length > 0 && <div style={styles.sliderBadge}>Klik voor slider</div>}
-              </div>
-
-              <div style={styles.cardContent}>
-                <h3>{product.name}</h3>
-                <p style={styles.description}>{product.description}</p>
-                <div style={styles.cardBottom}>
-                  <strong style={styles.price}>€{product.price}</strong>
-                  <button
-                    style={styles.smallButton}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      setCart([...cart, product]);
-                    }}
-                  >
-                    In mandje
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section style={styles.info}>
-        <div style={styles.infoCard}>✅ Betrouwbare verkoop</div>
-        <div style={styles.infoCard}>🇳🇱 Alleen verzending in Nederland</div>
-        <div style={styles.infoCard}>📦 Sealed producten</div>
-      </section>
-
-      {selectedProduct && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <button style={styles.close} onClick={() => setSelectedProduct(null)}>×</button>
-
-            <div style={styles.modalImageArea}>
-              {selectedProduct.images.length > 0 ? (
-                <>
-                  <img
-                    src={`/${selectedProduct.images[slide]}`}
-                    alt={selectedProduct.name}
-                    style={styles.modalImage}
-                  />
-                  {selectedProduct.images.length > 1 && (
-                    <>
-                      <button style={styles.prev} onClick={prevImage}>‹</button>
-                      <button style={styles.next} onClick={nextImage}>›</button>
-                    </>
-                  )}
-                </>
-              ) : (
-                <div style={styles.placeholder}>📦</div>
-              )}
-            </div>
-
-            <div style={styles.modalInfo}>
-              <h2>{selectedProduct.name}</h2>
-              <h3>€{selectedProduct.price}</h3>
-              <p>{selectedProduct.description}</p>
-              <p style={styles.note}>
-                Bekijk alle kanten van de box. Dit geeft kopers vertrouwen in de sealed staat.
-              </p>
-            </div>
+    <div className="relative h-full w-full max-w-[190px] rounded-2xl bg-white/70 p-3 shadow-2xl">
+      <div className={`flex h-full w-full flex-col justify-between rounded-xl bg-gradient-to-br ${styles[product.id]} p-4 text-white shadow-inner`}>
+        <div className="text-xs font-black uppercase tracking-widest">KT Trading</div>
+        <div className="text-center">
+          <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-full bg-white/80 text-4xl shadow-lg">
+            {product.id === 1 ? "🔥" : product.id === 2 ? "✨" : "💎"}
           </div>
+          <div className="text-2xl font-black leading-tight drop-shadow">{product.name.replace(" Boosterbox", "")}</div>
         </div>
-      )}
-
-      <footer style={styles.footer}>© 2026 KT Trading Cards</footer>
+        <div className="rounded-lg bg-black/25 px-3 py-2 text-center text-xs font-bold">BOOSTERBOX</div>
+      </div>
     </div>
   );
 }
 
-const styles = {
-  page: {
-    background: "#f7efe3",
-    minHeight: "100vh",
-    color: "#1c1917",
-    fontFamily: "Arial, sans-serif",
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "24px 6%",
-    background: "rgba(247,239,227,0.95)",
-    borderBottom: "1px solid #e7dccc",
-    position: "sticky",
-    top: 0,
-    zIndex: 10,
-  },
-  logo: { margin: 0, fontSize: 28 },
-  subtitle: { margin: "4px 0 0", color: "#78716c" },
-  cart: {
-    background: "white",
-    padding: "12px 18px",
-    borderRadius: 999,
-    boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
-  },
-  hero: {
-    padding: "90px 6%",
-    maxWidth: 1000,
-  },
-  badge: {
-    display: "inline-block",
-    background: "white",
-    padding: "10px 16px",
-    borderRadius: 999,
-    fontWeight: "bold",
-  },
-  heroTitle: {
-    fontSize: 64,
-    maxWidth: 760,
-    margin: "22px 0",
-    lineHeight: 1,
-  },
-  heroText: {
-    fontSize: 20,
-    lineHeight: 1.7,
-    maxWidth: 650,
-    color: "#57534e",
-  },
-  button: {
-    display: "inline-block",
-    marginTop: 24,
-    background: "#1c1917",
-    color: "white",
-    padding: "16px 24px",
-    borderRadius: 18,
-    textDecoration: "none",
-    fontWeight: "bold",
-  },
-  products: { padding: "40px 6%" },
-  sectionTitle: { fontSize: 42 },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-    gap: 28,
-  },
-  card: {
-    background: "white",
-    borderRadius: 30,
-    overflow: "hidden",
-    cursor: "pointer",
-    boxShadow: "0 15px 35px rgba(0,0,0,0.12)",
-    transition: "transform 0.25s ease",
-  },
-  imageBox: {
-    position: "relative",
-    height: 300,
-    background: "linear-gradient(135deg, #f8d7a4, #f4eee4)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 18,
-  },
-  image: {
-    maxHeight: "100%",
-    maxWidth: "100%",
-    objectFit: "contain",
-    filter: "drop-shadow(0 20px 20px rgba(0,0,0,0.25))",
-  },
-  placeholder: { fontSize: 70 },
-  sliderBadge: {
-    position: "absolute",
-    bottom: 14,
-    left: 14,
-    background: "rgba(28,25,23,0.85)",
-    color: "white",
-    padding: "8px 12px",
-    borderRadius: 999,
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-  cardContent: { padding: 24 },
-  description: { color: "#57534e", lineHeight: 1.6 },
-  cardBottom: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  price: { fontSize: 28 },
-  smallButton: {
-    background: "#1c1917",
-    color: "white",
-    border: 0,
-    borderRadius: 16,
-    padding: "12px 16px",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
-  info: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: 20,
-    padding: "40px 6% 80px",
-  },
-  infoCard: {
-    background: "white",
-    padding: 26,
-    borderRadius: 26,
-    boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
-    fontWeight: "bold",
-  },
-  modalOverlay: {
-    position: "fixed",
-    inset: 0,
-    background: "rgba(0,0,0,0.75)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 99,
-    padding: 20,
-  },
-  modal: {
-    background: "#f7efe3",
-    borderRadius: 32,
-    maxWidth: 1000,
-    width: "100%",
-    display: "grid",
-    gridTemplateColumns: "1.3fr 0.7fr",
-    overflow: "hidden",
-    position: "relative",
-  },
-  close: {
-    position: "absolute",
-    right: 16,
-    top: 16,
-    zIndex: 10,
-    border: 0,
-    borderRadius: "50%",
-    width: 42,
-    height: 42,
-    fontSize: 28,
-    cursor: "pointer",
-    background: "white",
-  },
-  modalImageArea: {
-    position: "relative",
-    minHeight: 560,
-    background: "#111",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 30,
-  },
-  modalImage: {
-    maxWidth: "100%",
-    maxHeight: 500,
-    objectFit: "contain",
-    borderRadius: 20,
-  },
-  modalInfo: { padding: 40, lineHeight: 1.7 },
-  note: {
-    background: "white",
-    padding: 18,
-    borderRadius: 18,
-    color: "#57534e",
-  },
-  prev: {
-    position: "absolute",
-    left: 20,
-    fontSize: 50,
-    border: 0,
-    borderRadius: "50%",
-    width: 54,
-    height: 54,
-    cursor: "pointer",
-  },
-  next: {
-    position: "absolute",
-    right: 20,
-    fontSize: 50,
-    border: 0,
-    borderRadius: "50%",
-    width: 54,
-    height: 54,
-    cursor: "pointer",
-  },
-  footer: {
-    textAlign: "center",
-    padding: 30,
-    borderTop: "1px solid #e7dccc",
-    color: "#78716c",
-  },
-};
+function ProductImage({ product }) {
+  const firstImage = product.images?.[0];
 
-createRoot(document.getElementById("root")).render(<App />);
+  if (firstImage) {
+    return (
+      <img
+        src={firstImage}
+        alt={product.name}
+        onError={(event) => {
+          event.currentTarget.style.display = "none";
+          event.currentTarget.nextElementSibling.style.display = "block";
+        }}
+        className="h-full object-contain drop-shadow-2xl transition duration-500 group-hover:scale-110"
+      />
+    );
+  }
+
+  return <BoosterBoxArt product={product} />;
+}
+
+function ProductSliderModal({ product, activeSlide, setActiveSlide, onClose }) {
+  if (!product) return null;
+
+  const images = product.images || [];
+  const hasImages = images.length > 0;
+
+  function previousSlide() {
+    setActiveSlide((current) => (current === 0 ? images.length - 1 : current - 1));
+  }
+
+  function nextSlide() {
+    setActiveSlide((current) => (current === images.length - 1 ? 0 : current + 1));
+  }
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-stone-950/75 px-4 py-8 backdrop-blur-md">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.94, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] bg-[#F7EFE3] shadow-2xl"
+      >
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 z-20 rounded-full bg-white/90 p-3 text-stone-900 shadow-lg transition hover:scale-105"
+          aria-label="Sluiten"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        <div className="grid gap-0 md:grid-cols-[1.2fr_0.8fr]">
+          <div className="relative flex min-h-[520px] items-center justify-center bg-stone-950 p-6">
+            {hasImages ? (
+              <img
+                src={images[activeSlide]}
+                alt={`${product.name} foto ${activeSlide + 1}`}
+                className="max-h-[470px] w-full rounded-3xl object-contain shadow-2xl"
+              />
+            ) : (
+              <div className="rounded-3xl bg-white p-10 text-center">
+                <p className="text-7xl">📦</p>
+                <p className="mt-4 font-black">Productfoto volgt</p>
+              </div>
+            )}
+
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={previousSlide}
+                  className="absolute left-5 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-3 shadow-lg transition hover:scale-105"
+                  aria-label="Vorige foto"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+                <button
+                  onClick={nextSlide}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-3 shadow-lg transition hover:scale-105"
+                  aria-label="Volgende foto"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+              </>
+            )}
+          </div>
+
+          <div className="p-7 md:p-9">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-widest text-stone-600 shadow-sm">
+              <Sparkles className="h-4 w-4" /> Sealed product
+            </span>
+            <h2 className="mt-5 text-4xl font-black tracking-tight">{product.name}</h2>
+            <p className="mt-3 text-3xl font-black">{formatPrice(product.price)}</p>
+            <p className="mt-5 leading-8 text-stone-600">{product.description}</p>
+            <p className="mt-4 rounded-2xl bg-white p-4 text-sm leading-6 text-stone-600 shadow-sm">
+              Bekijk alle kanten van de box met de slider. Dit helpt kopers vertrouwen te krijgen in de sealed staat van het product.
+            </p>
+
+            {hasImages && (
+              <div className="mt-6 grid grid-cols-5 gap-2">
+                {images.map((image, index) => (
+                  <button
+                    key={image}
+                    onClick={() => setActiveSlide(index)}
+                    className={`overflow-hidden rounded-xl border-2 bg-white p-1 transition ${
+                      activeSlide === index ? "border-stone-900" : "border-transparent opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={image} alt="Thumbnail" className="h-16 w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+export default function PokemonWebshopStart() {
+  const [cart, setCart] = useState([]);
+  const [query, setQuery] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(query.toLowerCase())
+    );
+  }, [query]);
+
+  const cartTotal = cart.reduce((sum, product) => sum + product.price, 0);
+
+  function addToCart(product) {
+    setCart((current) => [...current, product]);
+  }
+
+  function openProduct(product) {
+    setSelectedProduct(product);
+    setActiveSlide(0);
+  }
+
+  function closeProduct() {
+    setSelectedProduct(null);
+    setActiveSlide(0);
+  }
+
+  return (
+    <div className="min-h-screen bg-[#F7EFE3] text-stone-900">
+      <header className="sticky top-0 z-50 border-b border-stone-200 bg-[#F7EFE3]/90 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+          <div className="flex items-center gap-3">
+            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-stone-900 text-lg text-white shadow-sm">
+              KT
+            </div>
+            <div>
+              <p className="text-lg font-black tracking-tight">KT Trading Cards</p>
+              <p className="text-xs text-stone-500">Pokémon kaarten & boosterboxen</p>
+            </div>
+          </div>
+
+          <nav className="hidden items-center gap-7 text-sm font-medium text-stone-600 md:flex">
+            <a href="#producten" className="hover:text-stone-950">Producten</a>
+            <a href="#waarom" className="hover:text-stone-950">Waarom KT?</a>
+          </nav>
+
+          <div className="hidden items-center gap-3 md:flex">
+            <div className="rounded-full bg-white px-4 py-2 text-sm shadow-sm">
+              <ShoppingCart className="mr-2 inline h-4 w-4" />
+              {cart.length} items · {formatPrice(cartTotal)}
+            </div>
+          </div>
+
+          <button
+            className="rounded-xl bg-white p-2 shadow-sm md:hidden"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            aria-label="Menu openen"
+          >
+            {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
+
+        {mobileMenuOpen && (
+          <div className="border-t border-stone-200 bg-[#F7EFE3] px-5 py-4 md:hidden">
+            <div className="flex flex-col gap-3 text-sm font-medium text-stone-700">
+              <a href="#producten">Producten</a>
+              <a href="#waarom">Waarom KT?</a>
+              <span className="rounded-full bg-white px-4 py-2 shadow-sm">
+                Winkelmand: {cart.length} items · {formatPrice(cartTotal)}
+              </span>
+            </div>
+          </div>
+        )}
+      </header>
+
+      <main>
+        <section className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[1.1fr_0.9fr] md:items-center md:py-24">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+          >
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-stone-700 shadow-sm">
+              <Star className="h-4 w-4" /> Nieuwe sealed Pokémon collectie
+            </div>
+            <h1 className="max-w-3xl text-5xl font-black leading-tight tracking-tight md:text-7xl">
+              Zachte vibes, sterke pulls.
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-stone-600">
+              Shop boosterboxen met een rustige beige look, betrouwbare service en een speelse stijl geïnspireerd op Snorlax en Blastoise.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="#producten" className="rounded-2xl bg-stone-900 px-6 py-4 text-center font-bold text-white shadow-lg shadow-stone-300 transition hover:-translate-y-0.5">
+                Bekijk boosterboxen
+              </a>
+              <a href="#waarom" className="rounded-2xl bg-white px-6 py-4 text-center font-bold text-stone-800 shadow-sm transition hover:-translate-y-0.5">
+                Waarom bij ons kopen?
+              </a>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="relative"
+          >
+            <div className="absolute -left-6 -top-6 h-32 w-32 rounded-full bg-sky-200/50 blur-2xl" />
+            <div className="absolute -bottom-8 -right-8 h-40 w-40 rounded-full bg-amber-200/60 blur-2xl" />
+            <div className="relative overflow-hidden rounded-[2rem] bg-white p-6 shadow-2xl shadow-stone-300/50">
+              <div className="rounded-[1.5rem] bg-stone-900 p-6 text-white">
+                <p className="text-sm text-stone-300">Featured box</p>
+                <p className="mt-1 text-3xl font-black">Terastal Festival</p>
+                <p className="mt-3 text-sm leading-6 text-stone-300">
+                  Een premium spotlight-product voor bovenaan je webshop.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        <section id="producten" className="mx-auto max-w-7xl px-5 py-16">
+          <div className="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+            <div>
+              <p className="font-bold uppercase tracking-[0.25em] text-stone-500">Shop</p>
+              <h2 className="mt-2 text-4xl font-black tracking-tight">Boosterboxen</h2>
+            </div>
+            <label className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-sm md:min-w-80">
+              <Search className="h-5 w-5 text-stone-400" />
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Zoek boosterbox..."
+                className="w-full bg-transparent text-sm outline-none"
+              />
+            </label>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {filteredProducts.map((product) => (
+              <motion.article
+                key={product.id}
+                whileHover={{ y: -10, rotate: -0.5 }}
+                onClick={() => openProduct(product)}
+                className="group relative cursor-pointer overflow-hidden rounded-[2rem] bg-white shadow-lg shadow-stone-300/40 transition duration-500 hover:shadow-2xl hover:shadow-stone-400/40"
+              >
+                <div className="pointer-events-none absolute inset-0 z-10 opacity-0 transition duration-500 group-hover:opacity-100">
+                  <div className="absolute -left-20 top-0 h-full w-20 rotate-12 bg-white/35 blur-md transition duration-700 group-hover:translate-x-[420px]" />
+                </div>
+
+                <div className={`relative h-72 bg-gradient-to-br ${product.accent} p-5`}>
+                  <div className="flex items-start justify-between">
+                    <span className="rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-stone-700 shadow-sm">
+                      {product.tag}
+                    </span>
+                    <Package className="h-7 w-7 text-stone-700" />
+                  </div>
+
+                  <div className="mt-4 flex h-[220px] items-center justify-center overflow-hidden rounded-3xl bg-white/60 p-4 shadow-sm backdrop-blur-sm">
+                    <ProductImage product={product} />
+                  </div>
+
+                  {product.images?.length > 0 && (
+                    <div className="absolute bottom-3 left-3 rounded-full bg-stone-900/80 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
+                      Klik voor foto slider
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-2xl font-black tracking-tight">{product.name}</h3>
+                  <p className="mt-3 min-h-14 text-sm leading-6 text-stone-600">
+                    {product.description}
+                  </p>
+                  <div className="mt-6 flex items-center justify-between gap-4">
+                    <p className="text-2xl font-black">{formatPrice(product.price)}</p>
+                    <button
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        addToCart(product);
+                      }}
+                      className="rounded-2xl bg-stone-900 px-4 py-3 text-sm font-bold text-white transition hover:bg-stone-700"
+                    >
+                      In mandje
+                    </button>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+
+          {filteredProducts.length === 0 && (
+            <div className="mt-8 rounded-3xl bg-white p-8 text-center shadow-sm">
+              <p className="font-bold">Geen producten gevonden.</p>
+              <p className="mt-2 text-sm text-stone-500">Probeer een andere zoekterm.</p>
+            </div>
+          )}
+        </section>
+
+        <section id="waarom" className="mx-auto max-w-7xl px-5 py-16 pb-24">
+          <div className="grid gap-5 md:grid-cols-3">
+            {[
+              {
+                icon: ShieldCheck,
+                title: "Betrouwbare verkoop",
+                text: "Duidelijke productinformatie en nette communicatie.",
+              },
+              {
+                icon: Truck,
+                title: "Alleen verzending in Nederland",
+                text: "Wij verzenden momenteel uitsluitend binnen Nederland met veilige verzending en track & trace. Perfect voor Nederlandse collectors en sealed verzamelaars.",
+              },
+              {
+                icon: Star,
+                title: "Voor collectors",
+                text: "Focus op sealed boosterboxen en overzichtelijke collectie-updates.",
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-[2rem] bg-white p-7 shadow-sm">
+                <item.icon className="h-8 w-8" />
+                <h3 className="mt-5 text-xl font-black">{item.title}</h3>
+                <p className="mt-3 leading-7 text-stone-600">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <ProductSliderModal
+        product={selectedProduct}
+        activeSlide={activeSlide}
+        setActiveSlide={setActiveSlide}
+        onClose={closeProduct}
+      />
+
+      <footer className="border-t border-stone-200 px-5 py-8 text-center text-sm text-stone-500">
+        © 2026 KT Trading Cards · Demo webshop · Vervang prijzen, teksten en afbeeldingen voordat je live gaat.
+      </footer>
+    </div>
+  );
+}
+
