@@ -3,25 +3,34 @@ import { createRoot } from "react-dom/client";
 
 const products = [
   {
-    name: "Inferno X Boosterbox",
-    price: 120,
-    description: "Japanse Inferno X boosterbox, sealed en perfect voor collectors.",
-    images: ["/inferno-x-side-2.jpeg", "/inferno-x-back.jpeg"],
-    emoji: "🔥",
-  },
+  id: 1,
+  name: "Inferno X Boosterbox",
+  price: 120,
+  description:
+    "Japanse Inferno X boosterbox, factory sealed en perfect voor Pokémon collectors.",
+  images: [
+    "/images/inferno-front.jpeg",
+    "/images/inferno-side-1.jpeg",
+    "/images/inferno-side-2.jpeg",
+    "/images/inferno-back.jpeg",
+  ],
+  emoji: "🔥",
+},
   {
-    name: "Mega Dream EX Boosterbox",
-    price: 110,
-    description: "Japanse Mega Dream EX boosterbox, sealed en ideaal voor moderne collectors.",
-    images: [
-      "/mega-dream-front.jpeg",
-      "/mega-dream-back.jpeg",
-      "/mega-dream-side-1.jpeg",
-      "/mega-dream-side-2.jpeg",
-      "/mega-dream-side-3.jpeg",
-    ],
-    emoji: "✨",
-  },
+  id: 2,
+  name: "Mega Dream EX Boosterbox",
+  price: 110,
+  description:
+    "Japanse Mega Dream EX boosterbox, factory sealed en ideaal voor moderne Pokémon collectors.",
+  images: [
+    "/images/mega-front.jpeg",
+    "/images/mega-side-1.jpeg",
+    "/images/mega-side-2.jpeg",
+    "/images/mega-side-3.jpeg",
+    "/images/mega-back.jpeg",
+  ],
+  emoji: "✨",
+},
   {
     name: "Terastal Festival Boosterbox",
     price: 110,
