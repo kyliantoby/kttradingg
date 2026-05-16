@@ -80,7 +80,10 @@ function App() {
   const [cart, setCart] = useState([]);
   const [page, setPage] = useState("shop");
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+  const subtotal = cart.reduce(
+    (sum, item) => sum + item.price,
+    0
+  );
 
   const total =
     cart.length > 0
@@ -95,19 +98,24 @@ function App() {
     setCart(cart.filter((_, i) => i !== index));
   }
 
-  const currentImage = selected?.images?.[slide];
+  const currentImage =
+    selected?.images?.[slide];
 
   if (page === "checkout") {
     return (
       <div style={s.page}>
         <header style={s.header}>
-          <h1 style={s.logo}>KT Trading Cards</h1>
+          <h1 style={s.logo}>
+            KT Trading Cards
+          </h1>
 
           <p style={s.sub}>Afrekenen</p>
 
           <button
             style={s.backBtn}
-            onClick={() => setPage("shop")}
+            onClick={() =>
+              setPage("shop")
+            }
           >
             ← Verder winkelen
           </button>
@@ -121,10 +129,13 @@ function App() {
 
             {cart.length === 0 ? (
               <div style={s.emptyCart}>
-                <h3>Je mandje is leeg</h3>
+                <h3>
+                  Je mandje is leeg
+                </h3>
 
                 <p>
-                  Voeg eerst een product toe.
+                  Voeg eerst een
+                  product toe.
                 </p>
               </div>
             ) : (
@@ -139,16 +150,21 @@ function App() {
                   />
 
                   <div>
-                    <strong>{item.name}</strong>
+                    <strong>
+                      {item.name}
+                    </strong>
 
                     <p style={s.desc}>
-                      Sealed Japanse boosterbox
+                      Sealed Japanse
+                      boosterbox
                     </p>
 
                     <button
                       style={s.remove}
                       onClick={() =>
-                        removeFromCart(index)
+                        removeFromCart(
+                          index
+                        )
                       }
                     >
                       Verwijderen
@@ -156,14 +172,18 @@ function App() {
                   </div>
 
                   <strong>
-                    {formatPrice(item.price)}
+                    {formatPrice(
+                      item.price
+                    )}
                   </strong>
                 </div>
               ))
             )}
 
             <div style={s.formBox}>
-              <h2>Verzendgegevens</h2>
+              <h2>
+                Verzendgegevens
+              </h2>
 
               <div style={s.formGrid}>
                 <input
@@ -198,19 +218,24 @@ function App() {
               </div>
 
               <p style={s.noteText}>
-                Alleen verzending binnen Nederland.
+                Alleen verzending
+                binnen Nederland.
               </p>
             </div>
           </section>
 
           <aside style={s.summary}>
-            <h2>Besteloverzicht</h2>
+            <h2>
+              Besteloverzicht
+            </h2>
 
             <div style={s.row}>
               <span>Producten</span>
 
               <strong>
-                {formatPrice(subtotal)}
+                {formatPrice(
+                  subtotal
+                )}
               </strong>
             </div>
 
@@ -220,19 +245,24 @@ function App() {
               </strong>
 
               <p>
-                Veilig verzonden binnen
-                Nederland met DHL.
+                Veilig verzonden
+                binnen Nederland
+                met DHL.
               </p>
 
               <div style={s.row}>
-                <span>Verzendkosten</span>
+                <span>
+                  Verzendkosten
+                </span>
 
                 <strong>
                   {cart.length > 0
                     ? formatPrice(
                         SHIPPING_COST
                       )
-                    : formatPrice(0)}
+                    : formatPrice(
+                        0
+                      )}
                 </strong>
               </div>
             </div>
@@ -250,8 +280,8 @@ function App() {
             </button>
 
             <p style={s.noteText}>
-              iDEAL checkout wordt later
-              toegevoegd.
+              iDEAL checkout wordt
+              later toegevoegd.
             </p>
           </aside>
         </main>
@@ -296,9 +326,9 @@ function App() {
           Ontdek onze huidige
           collectie Japanse
           boosterboxen. Netjes
-          verpakt en verzonden met
-          DHL Track & Trace binnen
-          Nederland.
+          verpakt en verzonden
+          met DHL Track & Trace
+          binnen Nederland.
         </p>
 
         <div style={s.banner}>
@@ -316,10 +346,14 @@ function App() {
                 style={s.bannerImg}
               />
 
-              <strong>{p.name}</strong>
+              <strong>
+                {p.name}
+              </strong>
 
               <span>
-                {formatPrice(p.price)}
+                {formatPrice(
+                  p.price
+                )}
               </span>
             </div>
           ))}
@@ -356,12 +390,18 @@ function App() {
                 <h3>{p.name}</h3>
 
                 <p style={s.desc}>
-                  {p.description}
+                  {
+                    p.description
+                  }
                 </p>
 
                 <div style={s.bottom}>
-                  <strong style={s.price}>
-                    {formatPrice(p.price)}
+                  <strong
+                    style={s.price}
+                  >
+                    {formatPrice(
+                      p.price
+                    )}
                   </strong>
 
                   <button
@@ -369,7 +409,9 @@ function App() {
                     onClick={(e) => {
                       e.stopPropagation();
 
-                      addToCart(p);
+                      addToCart(
+                        p
+                      );
                     }}
                   >
                     In mandje
@@ -384,37 +426,64 @@ function App() {
       <section style={s.info}>
         <div style={s.infoCard}>
           <h3>
-            ✅ Betrouwbare verkoop
+            ✅ Betrouwbare
+            verkoop
           </h3>
 
           <p>
-            Producten worden netjes
-            verpakt en veilig
-            verzonden.
+            Alle producten
+            worden netjes en
+            zorgvuldig
+            verpakt, zodat jouw
+            bestelling veilig
+            en in goede staat
+            wordt verzonden.
+            Wij proberen iedere
+            collector een
+            betrouwbare
+            koopervaring te
+            bieden.
           </p>
         </div>
 
         <div style={s.infoCard}>
           <h3>
-            🇳🇱 Alleen verzending
-            in Nederland
+            🇳🇱 Alleen
+            verzending in
+            Nederland
           </h3>
 
           <p>
-            Wij verzenden voorlopig
-            alleen binnen
-            Nederland.
+            Wij verzenden
+            momenteel alleen
+            binnen Nederland,
+            zodat we
+            Nederlandse
+            collectors eerlijke
+            prijzen en
+            duidelijke
+            verzendkosten
+            kunnen aanbieden.
           </p>
         </div>
 
         <div style={s.infoCard}>
           <h3>
-            📦 DHL Track & Trace
+            🚧 Website in
+            aanbouw
           </h3>
 
           <p>
-            Iedere bestelling wordt
-            verzonden met DHL.
+            Onze webshop is nog
+            in aanbouw. Heb je
+            ideeën voor
+            toekomstige
+            producten of
+            verbeteringen?
+            Mail ons gerust via{" "}
+            <a href="mailto:kttradingcards@gmail.com">
+              kttradingcards@gmail.com
+            </a>
           </p>
         </div>
       </section>
@@ -425,7 +494,9 @@ function App() {
             <button
               style={s.close}
               onClick={() =>
-                setSelected(null)
+                setSelected(
+                  null
+                )
               }
             >
               ×
@@ -434,18 +505,30 @@ function App() {
             <div style={s.modalLeft}>
               {currentImage ? (
                 <img
-                  src={currentImage}
-                  alt={selected.name}
-                  style={s.modalImg}
+                  src={
+                    currentImage
+                  }
+                  alt={
+                    selected.name
+                  }
+                  style={
+                    s.modalImg
+                  }
                 />
               ) : (
-                <div style={s.bigFake}>
-                  {selected.emoji}
+                <div
+                  style={
+                    s.bigFake
+                  }
+                >
+                  {
+                    selected.emoji
+                  }
                 </div>
               )}
 
-              {selected.images.length >
-                1 && (
+              {selected.images
+                .length > 1 && (
                 <>
                   <button
                     style={s.prev}
@@ -469,7 +552,8 @@ function App() {
                     style={s.next}
                     onClick={() =>
                       setSlide(
-                        (slide + 1) %
+                        (slide +
+                          1) %
                           selected
                             .images
                             .length
@@ -487,7 +571,11 @@ function App() {
                 Sealed product
               </p>
 
-              <h2>{selected.name}</h2>
+              <h2>
+                {
+                  selected.name
+                }
+              </h2>
 
               <h3>
                 {formatPrice(
@@ -504,10 +592,13 @@ function App() {
               <button
                 style={s.payBtn}
                 onClick={() =>
-                  addToCart(selected)
+                  addToCart(
+                    selected
+                  )
                 }
               >
-                Toevoegen aan mandje
+                Toevoegen aan
+                mandje
               </button>
             </div>
           </div>
@@ -515,8 +606,7 @@ function App() {
       )}
 
       <footer style={s.footer}>
-        © 2026 KT Trading Cards ·
-        kttradingscards@gmail.com
+        © 2026 KT Trading Cards
       </footer>
     </div>
   );
@@ -610,7 +700,8 @@ const s = {
     background: "white",
     borderRadius: 28,
     padding: 22,
-    boxShadow: "0 18px 40px #0002",
+    boxShadow:
+      "0 18px 40px #0002",
     cursor: "pointer",
   },
 
@@ -639,7 +730,8 @@ const s = {
     background: "white",
     borderRadius: 30,
     overflow: "hidden",
-    boxShadow: "0 16px 40px #0002",
+    boxShadow:
+      "0 16px 40px #0002",
     cursor: "pointer",
   },
 
@@ -649,7 +741,8 @@ const s = {
     background:
       "linear-gradient(135deg,#f8d7a4,#f4eee4)",
     display: "flex",
-    justifyContent: "center",
+    justifyContent:
+      "center",
     alignItems: "center",
     padding: 20,
   },
@@ -745,8 +838,9 @@ const s = {
     background: "white",
     padding: 26,
     borderRadius: 24,
-    boxShadow: "0 10px 25px #0001",
-    lineHeight: 1.6,
+    boxShadow:
+      "0 10px 25px #0001",
+    lineHeight: 1.7,
   },
 
   overlay: {
@@ -755,7 +849,8 @@ const s = {
     background: "#000b",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent:
+      "center",
     zIndex: 50,
     padding: 20,
   },
@@ -790,7 +885,8 @@ const s = {
     background: "#111",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent:
+      "center",
     padding: 28,
   },
 
@@ -883,7 +979,8 @@ const s = {
     borderRadius: 28,
     padding: 26,
     height: "fit-content",
-    boxShadow: "0 16px 40px #0002",
+    boxShadow:
+      "0 16px 40px #0002",
   },
 
   row: {
